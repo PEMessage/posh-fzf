@@ -22,17 +22,17 @@ jobs:
           file: Cargo.toml
           field: package.version
 
-  release_please:
-    name: Release Please
-    permissions: write-all
-    runs-on: ubuntu-latest
-    if: github.repository == 'domsleee/posh-fzf'
-    steps:
-      - uses: googleapis/release-please-action@v4
-        id: release
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          config-file: .release-please-config.json
+  # release_please:
+  #   name: Release Please
+  #   permissions: write-all
+  #   runs-on: ubuntu-latest
+  #   if: github.repository == 'domsleee/posh-fzf'
+  #   steps:
+  #     - uses: googleapis/release-please-action@v4
+  #       id: release
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         config-file: .release-please-config.json
 
   github_build:
     name: ${{ matrix.target }}
@@ -134,7 +134,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    needs: [get_version, release_please, github_build]
+    needs: [get_version, github_build]
     permissions: write-all
     if: ${{ github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'chore(main)') }}
     steps:

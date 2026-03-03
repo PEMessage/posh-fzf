@@ -6,7 +6,7 @@ use std::process::{ChildStdin, Command, Stdio};
 
 use crate::args::RootArgs;
 use crate::timings::is_timings_enabled;
-use crate::timings::{write_perf_logs, TIMINGS};
+use crate::timings::{TIMINGS, write_perf_logs};
 use crate::util::{get_height, wait_for_child};
 use crate::{timing_end, timing_start};
 const HISTORY_NEWLINE_CHAR: char = '↵';
@@ -14,9 +14,7 @@ const HISTORY_NEWLINE_CHAR: char = '↵';
 pub fn history(args: &RootArgs, history_path: &PathBuf, trail_args: &[String]) -> io::Result<()> {
     timing_start!("child_fork");
     let mut child = Command::new("fzf");
-    child
-        .arg("--height")
-        .arg(get_height(args));
+    child.arg("--height").arg(get_height(args));
 
     for arg in trail_args {
         child.arg(arg);
