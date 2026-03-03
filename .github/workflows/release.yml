@@ -143,7 +143,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Publish Release
-      run: gh release edit ${{ needs.get_version.outputs.tag_name }} --draft=false --repo=domsleee/posh-fzf
+      run: gh release edit ${{ needs.get_version.outputs.tag_name }} --draft=false --repo=PEMessage/posh-fzf
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Setup Rust toolchain and cache
