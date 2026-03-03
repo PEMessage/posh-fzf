@@ -6,23 +6,23 @@ use std::process::{ChildStdin, Command, Stdio};
 
 use crate::args::RootArgs;
 use crate::timings::is_timings_enabled;
-use crate::timings::{TIMINGS, write_perf_logs};
+use crate::timings::{write_perf_logs, TIMINGS};
 use crate::util::{get_height, wait_for_child};
 use crate::{timing_end, timing_start};
 const HISTORY_NEWLINE_CHAR: char = '↵';
 
-pub fn history(args: &RootArgs, history_path: &PathBuf) -> io::Result<()> {
+pub fn history(args: &RootArgs, history_path: &PathBuf, trail_args: &[String]) -> io::Result<()> {
     timing_start!("child_fork");
-    let mut child = Command::new("fzf")
+    let mut child = Command::new("fzf");
+    child
         .arg("--height")
-        .arg(get_height(args))
-        .arg("--scheme=history")
-        .arg("--preview")
-        .arg("posh-fzf print-history-line {}")
-        .arg("--preview-window=right:30%")
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .spawn()?;
+        .arg(get_height(args));
+
+    for arg in trail_args {
+        child.arg(arg);
+    }
+
+    let mut child = child.stdin(Stdio::piped()).stdout(Stdio::piped()).spawn()?;
     timing_end!("child_fork");
 
     timing_start!("get_stdin");

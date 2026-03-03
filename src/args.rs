@@ -19,7 +19,11 @@ pub enum Commands {
     /// Print the powershell init script
     Init,
     /// Reverse history search (ctrl+r)
-    History { history_path: PathBuf },
+    History {
+        history_path: PathBuf,
+        #[clap(last = true)]
+        trail_args: Vec<String>,
+    },
     /// Prints a history line, by replacing ↵ with newlines
     PrintHistoryLine { history_line: String },
     /// Custom command
